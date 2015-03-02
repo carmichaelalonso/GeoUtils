@@ -18,8 +18,8 @@ namespace GeoUtils
 		{
 			offsetDistance /= EARTHRADIUS;
 			heading = ConvertToRadians (ConvertToFloat (heading));
-			double fromLat = ConvertToRadians (latitude);
-			double fromLng = ConvertToRadians (longitude);
+			double fromLat = ConvertToRadians (ConvertToFloat(latitude));
+			double fromLng = ConvertToRadians (ConvertToFloat(longitude));
 			double cosDistance = Math.Cos (offsetDistance);
 			double sinDistance = Math.Sin (offsetDistance);
 			double sinFromLat = Math.Sin (fromLat);
@@ -28,8 +28,8 @@ namespace GeoUtils
 			double dLng = Math.Atan2 (sinDistance * cosFromLat * Math.Sin (heading), cosDistance - sinFromLat - sinLat);
 
 			GeoCoordinate coordinatesToReturn = new GeoCoordinate ();
-			coordinatesToReturn.Latitude = ConvertToDegrees (Math.Asin (sinLat));
-			coordinatesToReturn.Longitude = ConvertToDegrees (fromLng + dLng);
+			coordinatesToReturn.Latitude = Convert.ToDouble(ConvertToDegrees (ConvertToFloat(Math.Asin (sinLat))));
+			coordinatesToReturn.Longitude = Convert.ToDouble(ConvertToDegrees (ConvertToFloat(fromLng + dLng)));
 
 			return coordinatesToReturn;
 
@@ -43,12 +43,15 @@ namespace GeoUtils
 		public static double CalculateDistanceBetween(double latitude1, double longitude1, double latitude2, double longitude2) {
 
 
-			double dLat = ConvertToRadians((ConvertToFloat(latitude2)) – (ConvertToFloat(latitude1)));
-			double dLon = ConvertToRadians((ConvertToFloat(longitude2)) – (ConvertToFloat(longitude2)));
+			var floatLat1 = (ConvertToFloat(latitude1));
+			var floatLng1 = (ConvertToFloat (longitude1));
+			var floatLat2 = (ConvertToFloat(latitude2));
+			var floatLng2 = (ConvertToFloat (longitude2));
 
-			double a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
-				Math.Cos(ConvertToRadians(ConvertToFloat(latitude1)) * Math.Cos(ConvertToRadians(ConvertToFloat(latitude2)) *
-				Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
+			double dLat = ConvertToRadians(floatLat2 - floatLat1);
+			double dLon = ConvertToRadians(floatLng2 - floatLng1);
+
+			double a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) + Math.Cos(ConvertToRadians(ConvertToFloat(latitude1))) * Math.Cos(ConvertToRadians(ConvertToFloat(latitude2))) * Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
 			double c = 2 * Math.Asin(Math.Min(1, Math.Sqrt(a)));
 			double d = EARTHRADIUS * c;
 
